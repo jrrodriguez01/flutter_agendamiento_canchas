@@ -25,7 +25,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
   final TextEditingController _porcentajeInput = TextEditingController();
   late String _canchaInput = '';
   int _porcentaje = 0;
-  late Agenda agenda;
+  late Agenda agenda = Agenda(agendaDetail: <AgendaDetail>[]);
 
   @override
   void initState() {
@@ -94,6 +94,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
             Container(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: DropdownButtonFormField(
+                key: Key('input-cancha'),
                 decoration: const InputDecoration(
                     icon: Icon(Icons.sports_soccer),
                     labelText: "Cancha"
@@ -115,6 +116,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
             Container(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: TextFormField(
+                key: Key('input-fecha'),
                 controller: _dateInput,
                 validator: (value) => validateInputCancha(value, agenda.agendaDetail, _canchaInput, 'F'),
                 decoration: const InputDecoration(
@@ -144,6 +146,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
             Container(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: TextFormField(
+                key: Key('input-porcentaje'),
                 controller: _porcentajeInput,
                 readOnly: true,
                 decoration: const InputDecoration(
@@ -155,6 +158,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
             Container(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: TextFormField(
+                key: Key('input-usuario'),
                 controller: _userInput,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.people_outline),
@@ -166,6 +170,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
+                key: Key('button-agendar'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     AgendaDetail nuevaAgenda = AgendaDetail(id: const Uuid().v4(), cancha: _canchaInput, usuario: _userInput.text, fecha: DateFormat('dd-MM-yyyy').parse(_dateInput.text), porcentajeLluvia: _porcentaje);
