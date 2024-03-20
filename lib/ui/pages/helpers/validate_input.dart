@@ -41,8 +41,5 @@ String? validateInputCancha(value,List<AgendaDetail> agenda, String comodin, Str
       }
     }
   }
-  /*else if (valMaxAgendamientoDia(agenda, cancha, fecha)){
-    return 'No existe disponibilidad';
-  }*/
   return null;
 }
