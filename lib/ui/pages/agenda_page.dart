@@ -8,6 +8,7 @@ import '../../domain/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'helpers/messages.dart';
+import 'helpers/validate_input.dart';
 
 class AgendaPage extends ConsumerStatefulWidget {
   const AgendaPage({super.key});
@@ -22,7 +23,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
   final TextEditingController _userInput = TextEditingController();
   final TextEditingController _dateInput = TextEditingController();
   final TextEditingController _porcentajeInput = TextEditingController();
-  late String _canchaInput;
+  late String _canchaInput = '';
   int _porcentaje = 0;
   late Agenda agenda;
 
@@ -76,21 +77,6 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
     }
   }
 
-  valMaxAgendamientoDia(){
-    bool respuesta = false;
-    int cant = 0;
-    for (var element in agenda.agendaDetail) {
-      if(element.cancha == _canchaInput &&
-          DateFormat('dd-MM-yyyy').format(element.fecha) == _dateInput.text){
-        cant++;
-      }
-    }
-    if (cant >= 3){
-      respuesta = true;
-    }
-    return respuesta;
-  }
-
   @override
   Widget build(BuildContext context) {
     final cancha = ref.watch(canchaProvider);
@@ -123,28 +109,14 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
                     _canchaInput = value!;
                   });
                 },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Indicar una cancha.';
-                  }else if (valMaxAgendamientoDia()){
-                    return 'No existe disponibilidad';
-                  }
-                  return null;
-                },
+                validator: (value) => validateInputCancha(value, agenda.agendaDetail, _dateInput.text, 'C'),
               ),
             ),
             Container(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: TextFormField(
                 controller: _dateInput,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Indicar una fecha.';
-                  }else if (valMaxAgendamientoDia()){
-                    return 'No existe disponibilidad';
-                  }
-                  return null;
-                },
+                validator: (value) => validateInputCancha(value, agenda.agendaDetail, _canchaInput, 'F'),
                 decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today),
                     labelText: "Fecha"
@@ -188,14 +160,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
                   icon: Icon(Icons.people_outline),
                   labelText: 'Nombre Usuario',
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Indicar el nombre de usuario.';
-                  }else if (value.length < 3){
-                    return 'Indicar al menos 3 caracteres.';
-                  }
-                  return null;
-                },
+                validator: (value) => validateInputUsuario(value),
               ),
             ),
             Padding(
