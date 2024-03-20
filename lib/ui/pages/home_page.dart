@@ -30,7 +30,7 @@ class HomePageState extends ConsumerState<HomePage> {
       return prefs.getString('lAgenda');
     });
     if (lAgenda != null) {
-      Map<String, dynamic> listaMap = jsonDecode(lAgenda!);
+      Map<String, dynamic> listaMap = jsonDecode(lAgenda);
       Agenda datos = Agenda.fromJson(listaMap);
       agenda = datos;
       agenda.agendaDetail.sort((a, b) => a.fecha.compareTo(b.fecha));
@@ -75,8 +75,8 @@ class _AgendaView extends ConsumerWidget {
     bool existeReserva = registros.isNotEmpty;
 
     Future<void> borrarAgenda(String uuid) async {
-      final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-      final SharedPreferences prefs = await _prefs;
+      final Future<SharedPreferences> vprefs = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await vprefs;
       Agenda vagenda = Agenda(agendaDetail: <AgendaDetail>[]);
       for (var element in registros) {
         if(uuid != element.id){
@@ -111,7 +111,7 @@ class _AgendaView extends ConsumerWidget {
                   Navigator.of(context).pop();
                   borrarAgenda(id);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
               TextButton(
                 onPressed: () {
@@ -122,7 +122,7 @@ class _AgendaView extends ConsumerWidget {
                     color: Colors.black38,
                   ),
                 ),
-                child: Text('Cancelar'),
+                child: const Text('Cancelar'),
               ),
             ],
             title: Text(title),

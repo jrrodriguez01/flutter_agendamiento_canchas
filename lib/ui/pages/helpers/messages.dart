@@ -17,7 +17,7 @@ void showMessage(BuildContext context, String title, String message) {
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.home);
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
         title: Text(title),
@@ -47,7 +47,7 @@ void showConfirm(BuildContext context, String title, String message,
               Navigator.of(context).pop();
               onOkayPressed();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
           TextButton(
             onPressed: () {
@@ -58,7 +58,7 @@ void showConfirm(BuildContext context, String title, String message,
                 color: Colors.black38,
               ),
             ),
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
         ],
         title: Text(title),

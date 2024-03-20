@@ -1,21 +1,12 @@
-//import 'package:agendamiento_cancha/domain/usecase/agenda/agenda_use.dart';
-//import 'package:agendamiento_cancha/infrastructure/driven_adapter/agenda/agenda_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/model/agenda/agenda.dart';
 
 enum CanchaFilter { all, canchaA, canchaB, canchaC }
 
-//List<AgendaDetail> _listInit = <AgendaDetail>[];
-
 final canchaFilterProvider = StateProvider<CanchaFilter>((ref) {
   return CanchaFilter.all;
 });
-
-/*final getAgendaSave =  Provider<AgendaUseCase>((ref) {
-  _listInit = (AgendaUseCase(AgendaApi()).getAllAgendas() as List<AgendaDetail>?)!;
-  return  AgendaUseCase(AgendaApi());
-});*/
 
 final agendasProvider = StateProvider<List<AgendaDetail>>((ref) {
   return [];

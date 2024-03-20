@@ -42,7 +42,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
       return prefs.getString('lAgenda');
     });
     if (lAgenda != null) {
-      Map<String, dynamic> listaMap = jsonDecode(lAgenda!);
+      Map<String, dynamic> listaMap = jsonDecode(lAgenda);
       Agenda datos = Agenda.fromJson(listaMap);
       agenda = datos;
     }else{
