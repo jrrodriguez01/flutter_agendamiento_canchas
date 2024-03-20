@@ -5,4 +5,5 @@ class AgendaUseCase{
   final AgendaGateway _agendaGateway;
   AgendaUseCase(this._agendaGateway);
   Future<List<AgendaDetail>> getAllAgendas() => _agendaGateway.getAgendas();
+  Future<int> getPorcentajeLluvia(String fecha) => _agendaGateway.getPorcentajeLluvia(fecha);
 }

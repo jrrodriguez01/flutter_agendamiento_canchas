@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/model/agenda/agenda.dart';
+import '../../domain/usecase/agenda/agenda_use.dart';
+import '../../infrastructure/driven_adapter/agenda/agenda_api.dart';
 
 enum CanchaFilter { all, canchaA, canchaB, canchaC }
 
@@ -11,7 +13,6 @@ final canchaFilterProvider = StateProvider<CanchaFilter>((ref) {
 final agendasProvider = StateProvider<List<AgendaDetail>>((ref) {
   return [];
 });
-
 
 final filteredAgendasProvider = Provider<List<AgendaDetail>>((ref) {
   final selectedFilter = ref.watch(canchaFilterProvider);
@@ -28,5 +29,8 @@ final filteredAgendasProvider = Provider<List<AgendaDetail>>((ref) {
     case CanchaFilter.canchaC:
       return agendas.where((el) => el.cancha == 'C' ).toList();
   }
+});
 
+final allAgendaProvider = Provider<AgendaUseCase>((ref) {
+  return  AgendaUseCase(AgendaApi());
 });

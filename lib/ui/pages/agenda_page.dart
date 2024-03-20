@@ -21,7 +21,9 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final TextEditingController _userInput = TextEditingController();
   final TextEditingController _dateInput = TextEditingController();
+  final TextEditingController _porcentajeInput = TextEditingController();
   late String _canchaInput;
+  int _porcentaje = 0;
   late Agenda agenda;
 
   @override
@@ -34,7 +36,17 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
   void dispose() {
     _dateInput.dispose();
     _userInput.dispose();
+    _porcentajeInput.dispose();
     super.dispose();
+  }
+
+  Future<void> getporcentaje(String fecha) async {
+    final agenda = ref.read(allAgendaProvider);
+    int porcentaje = await agenda.getPorcentajeLluvia(fecha);
+    setState(() {
+      _porcentaje = porcentaje;
+      _porcentajeInput.text = porcentaje.toString();
+    });
   }
 
   Future<void> initAgenda() async {
@@ -55,12 +67,13 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
     agenda.agendaDetail.add(nuevaAgenda);
     agenda.agendaDetail.sort((a, b) => a.fecha.compareTo(b.fecha));
     await prefs.setString('lAgenda', jsonEncode(agenda.toJson()));
+    ref.read(agendasProvider.notifier).update((state) => []);
     for (var element in agenda.agendaDetail) {
       ref.read(agendasProvider.notifier).update((state) => [
         ...state,
         element
       ]);
-      }
+    }
   }
 
   valMaxAgendamientoDia(){
@@ -147,11 +160,24 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
 
                   if(pickedDate != null ){
                     String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                    String formatDateWeather = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    await getporcentaje(formatDateWeather);
                     setState(() {
                       _dateInput.text = formattedDate;
                     });
                   }
                 },
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: TextFormField(
+                controller: _porcentajeInput,
+                readOnly: true,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.cloud_circle),
+                  labelText: '% Probabilidad lluvia',
+                ),
               ),
             ),
             Container(
@@ -177,8 +203,7 @@ class AgendaPageState extends ConsumerState<AgendaPage> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    AgendaDetail nuevaAgenda = AgendaDetail(id: const Uuid().v4(), cancha: _canchaInput, usuario: _userInput.text, fecha: DateFormat('dd-MM-yyyy').parse(_dateInput.text), porcentajeLluvia: 0);
-                    ref.read(agendasProvider.notifier).update((state) => []);
+                    AgendaDetail nuevaAgenda = AgendaDetail(id: const Uuid().v4(), cancha: _canchaInput, usuario: _userInput.text, fecha: DateFormat('dd-MM-yyyy').parse(_dateInput.text), porcentajeLluvia: _porcentaje);
                     saveAgenda(nuevaAgenda);
                     showMessage(context,'Confirmación','Se realizo el agendamiento exitosamente');
                   }

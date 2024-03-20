@@ -190,9 +190,18 @@ class _AgendaView extends ConsumerWidget {
                                 )
                               ],
                             ),
-                            subtitle: Text(
-                                'Cancha ${agenda.cancha}',
-                                style: const TextStyle(fontSize: 16.0)
+                            subtitle: Row(
+                              children: <Widget>[
+                                Text(
+                                    'Cancha ${agenda.cancha}',
+                                    style: const TextStyle(fontSize: 16.0)
+                                ),
+                                const Spacer(),
+                                Text(
+                                    'Lluvia ${agenda.porcentajeLluvia}%',
+                                    style: const TextStyle(fontSize: 16.0)
+                                ),
+                              ],
                             ),
                           ),
                         ),
